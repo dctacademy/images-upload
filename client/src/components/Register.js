@@ -1,164 +1,73 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { withFormik, Form, Field } from 'formik'
-import * as Yup from 'yup'
 import axios from './config/axios'
+import Swal from 'sweetalert2'
 
-const Register = (props) => {
+class Register extends React.Component{
+    constructor(){
+        super();
+        this.state= {
+            fullName:"",
+            email: "",
+            password: "",
+            image: {}
+        }
+    }
+    fileHandle = (e) =>{
+        console.log(e.target.files)
+        this.setState({image: e.target.files[0]})
+    }
+    handleSubmit = (e) =>{
+        e.preventDefault()
+        const formData = new FormData()
+        formData.append('fullName',this.state.fullName)
+        formData.append('email',this.state.email)
+        formData.append('password',this.state.password)
+        formData.append('image',this.state.image)
+        axios.post('/users/register', formData)
+        .then((response) =>{
+            // console.log(response.data)
+            if(response.data.hasOwnProperty('errors')){
+                Swal.fire({
+                    type: 'info',
+                    text: "Check the fileds"
+                })
+            }else{
+                console.log(response.data)
+                this.props.history.push('/login')
+                
+            }
 
-    const { values, errors, touched, isSubmitting, status } = props
-    document.title = "Register"
-
-    return (
-        <div className="wrapper">
-            <div className="loginPage">
-                <div className="loginBox">
-                    <div className="logo">
-                        <Link to="/"><i className="fas fa-angle-left"></i></Link>
-                    </div>
-                    <div className="text half">
-
-                    </div>
-                    <div className="action half">
-                        <div>
-                            <div>
-                                <h1>Create a New Account</h1>
-                                <Form>
-                                    <Field className="field" 
-                                        type="text" 
-                                        name="fullname"
-                                        placeholder="Full Name" 
-                                        />
-                                    { touched.fullname && errors.fullname && <p className="error">{errors.fullname}</p> }
-                                    <div className="form-row">
-                                        <div className="col-md-6">
-                                            <Field className="field" 
-                                                type="email" 
-                                                name="email"
-                                                placeholder="Email Id"
-                                                />
-                                            { touched.email && errors.email && <p className="error">{errors.email}</p> }
-                                        </div>
-                                        <div className="col-md-6">
-                                            <Field className="field" 
-                                                type="text" 
-                                                name="mobile"
-                                                placeholder="Mobile" 
-                                                />
-                                            { touched.mobile && errors.mobile && <p className="error">{errors.mobile}</p> }
-                                        </div>
-                                        <div className="col-md-6">
-                                            <Field className="field" 
-                                                type="password" 
-                                                name="password"
-                                                placeholder="New Password" 
-                                                />
-                                            { touched.password && errors.password && <p className="error">{errors.password}</p> }
-                                        </div>
-                                        <div className="col-md-6">
-                                            <Field className="field" 
-                                                type="password" 
-                                                name="confirm_password"
-                                                placeholder="Confirm Password"
-                                                />
-                                            { touched.confirm_password && errors.confirm_password && <p className="error">{errors.confirm_password}</p> }
-                                        </div>
-                                    </div>                                        
-                                    <div className="roleOptions">
-                                        {['Admin','Student'].map((item, index) => {
-                                            return (
-                                                <div className="custom-control custom-radio" key={index}>
-                                                    <Field type="radio" 
-                                                        id={`choose-item-${index}`} 
-                                                        name="role" 
-                                                        className="custom-control-input"
-                                                        value={item}
-                                                        checked={item === values.role}
-                                                        />
-                                                    <label className="custom-control-label" 
-                                                        htmlFor={`choose-item-${index}`}>
-                                                        {item}
-                                                    </label>
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                    { touched.role && errors.role && <p className="error">{errors.role}</p> }
-
-                                    <button type="submit" 
-                                            disabled={isSubmitting} >
-                                    {isSubmitting ? <i className="fas fa-spin fa-circle-notch"></i> : 'Register' }</button>
-                                </Form>
-
-                                { status && <p className="success">{status.success}</p> }
-
-                                <div className="extraLink">
-                                    Already have an account ? <Link to="/login">Sign In</Link>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+    handleChange = (e) => {
+        const value = e.target.value
+        this.setState({[e.target.name] : value})
+    }
+    render(){
+        const {email, password, fullName} = this.state
+        return (
+            <div>
+                <h2>Register</h2>
+                <form >
+                <label htmlFor="fullName">Full Name</label>
+                <input type="text" name="fullName" value={fullName} onChange={this.handleChange}/>
+                <br />
+                <label htmlFor="email">Email</label>
+                <input type="email" name="email" value={email} onChange={this.handleChange}/>
+                <br />
+                <label htmlFor="password">Password</label>
+                <input type="password" name="password" value={password} onChange={this.handleChange}/>
+                <br />
+                <label htmlFor="image">Upload Image</label>
+                <input type="file" name="image"  onChange={this.fileHandle}/>
+                <br />
+                <button onClick={this.handleSubmit}>Register</button>
+                </form>
             </div>
-        </div>
-    )
+        )
+    }
 }
 
-const formikRegister = withFormik({
-    mapPropsToValues(){
-        return {
-            fullname: "",
-            email: "",
-            mobile: "",
-            password: "",
-            confirm_password: "",
-            role: ""
-        }
-    },
-
-    validationSchema: Yup.object().shape({
-        fullname        : Yup.string()
-                              .min(4, "Fullname is short")
-                              .required("Fullname is required"),
-        email           : Yup.string()
-                             .email("Email is not valid")
-                             .required("Email is required"),
-        mobile          : Yup.number()
-                             .typeError("Mobile number is invalid")
-                             .min(1000000000, "Mobile number is invalid")
-                             .max(9999999999, "Mobile number is invalid")
-                             .required("Mobile number is required"),
-        password        : Yup.string()
-                             .min(6, "Password is short")
-                             .required("Password is required"),
-        confirm_password: Yup.string()
-                             .oneOf([Yup.ref('password'), null],"Passwords don't match")
-                             .required("Confirm password is required"),
-        role            : Yup.string()
-                             .required("Role is required")
-    }),
-
-    handleSubmit(values, { setErrors, resetForm, setSubmitting, setStatus }){
-        setStatus({success: ''})
-
-        axios.post("/api/users/register",values)
-            .then(res => {
-                setSubmitting(false)
-                if(res.data.errors){
-                    const errors = res.data.errors
-                    setErrors({
-                        fullname: errors.fullname ? errors.fullname.message : "",
-                        email: errors.email ? errors.email.message : "",
-                        mobile: errors.mobile ? errors.mobile.message : "",
-                        password: errors.password ? errors.password.message : "",
-                        role: errors.role ? errors.role.message : ""
-                    })
-                }else{                      
-                        resetForm()
-                        setStatus({success: 'Successfully Registered'})
-                }
-            })
-    }
-})(Register)
-
-export default formikRegister
+export default Register

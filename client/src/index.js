@@ -1,15 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux'
 import configureStore from './store/Store'
+import { saveUserOnLoad, removeUser } from "./actions/User"
 
 const store = configureStore()
 store.subscribe(() => {
     // console.log(store.getState())
 })
+if(localStorage.getItem('authToken')){
+  store.dispatch(saveUserOnLoad(localStorage.getItem('authToken')))
+}else{
+  store.dispatch(removeUser())
+}
 ReactDOM.render(
   <React.StrictMode>
      <Provider store={store}>

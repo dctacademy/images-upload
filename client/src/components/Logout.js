@@ -10,13 +10,13 @@ class Logout extends React.Component {
         const { user, dispatch, history } = this.props
         history.push("/")
         if (user) {
-            axios.delete("/api/users/logout", {
+            axios.delete("/users/logout", {
                 headers: { 'x-auth': user.token }
             })
                 .then(res => {
                     if (res.data.success) {
                         dispatch(removeUser())
-                        localStorage.removeItem("token")
+                        localStorage.removeItem("authToken")
                     }
                 })
         }

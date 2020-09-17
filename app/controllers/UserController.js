@@ -16,7 +16,9 @@ usersController.all = (req,res) => {
 
 usersController.register = (req, res) => {
     const body = req.body 
+    // console.log(body)
     const user = new User(body)
+    user.image = req.file
     user.save()
         .then((user) => {
             res.json(user)
@@ -35,7 +37,7 @@ usersController.login =(req,res) => {
             res.send(user)
         })
         .catch(err => {
-            res.send({error: err})
+            res.send({errors: err})
         })
 }
 
@@ -51,14 +53,16 @@ usersController.delete = (req,res) => {
 }
 
 usersController.account = (req,res) => {
-    const id = req.params.id
-    User.findOne({"_id":id})
+    const token = req.token
+    User.findOne({"tokens.token": token})
         .then(user => {
             res.send({
                 id: user._id, 
-                fullname: user.fullname, 
+                fullName: user.fullName, 
                 role: user.role, 
-                email: user.email
+                token,
+                email: user.email,
+                image: user.image
             })
         })
         .catch(err => {

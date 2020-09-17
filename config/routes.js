@@ -4,7 +4,7 @@ const {auth} = require('../app/middlewares/auth')
 
 const  usersController  = require('../app/controllers/UserController')
 const { upload } = require("../app/middlewares/multer")
-router.post('/users/register', usersController.register)
+router.post('/users/register',upload.single('image'), usersController.register)
 router.get('/users/all',auth, usersController.all)
 router.post('/users/login', usersController.login)
 router.get('/users/account', auth, usersController.account)

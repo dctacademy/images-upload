@@ -22,8 +22,13 @@ export const removeUser = () => {
 
 export const saveUserOnLoad = (token) => {
     return (dispatch) => {
-        axios.get(`/api/users/token/${token}`)
+        axios.get(`/users/account`,{
+            headers: {
+                'x-auth': token
+            }
+        })
             .then(res => {
+                // console.log(res.data)
                 dispatch(saveUser(res.data))
             })
             .catch(err => {
