@@ -50,7 +50,7 @@ class Register extends React.Component{
         return (
             <div>
                 <h2>Register</h2>
-                <form >
+                <form onSubmit={this.handleSubmit}>
                 <label htmlFor="fullName">Full Name</label>
                 <input type="text" name="fullName" value={fullName} onChange={this.handleChange}/>
                 <br />
@@ -63,7 +63,7 @@ class Register extends React.Component{
                 <label htmlFor="image">Upload Image</label>
                 <input type="file" name="image"  onChange={this.fileHandle}/>
                 <br />
-                <button onClick={this.handleSubmit}>Register</button>
+                <button >Register</button>
                 </form>
             </div>
         )

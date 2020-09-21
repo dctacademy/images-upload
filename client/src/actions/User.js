@@ -36,3 +36,21 @@ export const saveUserOnLoad = (token) => {
             })
     }
 }
+export const updateUserInfo = (id, formData,history) => {
+    return (dispatch) => {
+        axios.put(`/users/edit/${id}`,formData,{
+            headers: {
+                'x-auth': localStorage.getItem("authToken")
+            }
+        })
+            .then(res => {
+                // console.log(res.data)
+                dispatch(updateUser(res.data))
+                history.push('/account')
+
+            })
+            .catch(err => {
+                // dispatch(removeUser())
+            })
+    }
+}

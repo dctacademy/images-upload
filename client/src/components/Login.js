@@ -41,7 +41,7 @@ class Login extends React.Component{
                 }
                 localStorage.setItem('authToken', token)
                 this.props.dispatch(saveUser(user))
-                this.props.history.push('/')
+                this.props.history.push('/account')
                 
             }
 

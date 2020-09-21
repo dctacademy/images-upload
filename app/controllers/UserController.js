@@ -73,7 +73,6 @@ usersController.update = (req,res) => {
     const id = req.params.id
     const body = req.body
     body.image = req.file
-    // console.log(req.file)
     User.findByIdAndUpdate({"_id": id}, body, {new: true})
         .then(user => {
             res.send(user)

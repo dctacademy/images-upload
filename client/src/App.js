@@ -9,6 +9,7 @@ import Login from "./components/Login"
 import Logout from "./components/Logout"
 import Register from "./components/Register"
 import Account from "./components/Account"
+import EditUser from './components/EditUser';
 function App(props) {
   // console.log(props.user)
   return (
@@ -32,6 +33,7 @@ function App(props) {
             <Route path="/login" component={Login} exact={true} />
             <Route path="/register" component={Register} exact={true} />
             <Route path="/account" component={Account} exact={true} />
+            <Route path="/edit/:id" component={EditUser} exact={true} />
         </Switch>
         
       </BrowserRouter>
