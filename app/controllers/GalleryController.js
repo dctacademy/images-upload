@@ -5,7 +5,7 @@ const { Gallery } = require("../models/Gallery")
 
 
 galleryController.all = (req,res) => {
-    Gallery.find()
+    Gallery.find({"userId": req.user.id})
         .then(galleries => {
             res.send(galleries)
         })

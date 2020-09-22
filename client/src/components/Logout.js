@@ -17,6 +17,7 @@ class Logout extends React.Component {
                     if (res.data.success) {
                         dispatch(removeUser())
                         localStorage.removeItem("authToken")
+                        history.push('/login')
                     }
                 })
         }
