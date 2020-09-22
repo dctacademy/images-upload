@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 const Account = (props) => {
     const {user} = props
-    
     return (
         <React.Fragment>
             <h2>Account</h2>
@@ -12,7 +11,7 @@ const Account = (props) => {
              <p>Full Name: {user.fullName}</p>
              <p>Email: {user.email}</p>
              <p>Role: {user.role}</p>
-             <img alt="profile" src={`http://localhost:3005/${user.image ? user.image.path : ""}`} style={{height: 100,width: 100}} />
+             <img alt="profile" src={`${process.env.PUBLIC_URL ? process.env.PUBLIC_URL  : "http://localhost:3005"}/${user.image ? user.image.path : ""}`} style={{height: 100,width: 100}} />
              <br />
              <br />
              <Link to={`/edit/${user.id}`}>Edit</Link>

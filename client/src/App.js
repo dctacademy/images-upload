@@ -10,6 +10,7 @@ import Logout from "./components/Logout"
 import Register from "./components/Register"
 import Account from "./components/Account"
 import EditUser from './components/EditUser';
+import Gallery from './components/Gallery/Galleries';
 function App(props) {
   // console.log(props.user)
   return (
@@ -20,6 +21,7 @@ function App(props) {
       <Link to="/"> DCT Academy</Link> 
       {Object.keys(props.user).length > 0 ? 
        <><Link to="/account"> Account</Link><Link to="/logout"> Logout</Link>
+       <Link to="/galleries"> Gallery</Link>
        </>
         :
         <><Link to="/login"> Login</Link>
@@ -34,6 +36,7 @@ function App(props) {
             <Route path="/register" component={Register} exact={true} />
             <Route path="/account" component={Account} exact={true} />
             <Route path="/edit/:id" component={EditUser} exact={true} />
+            <Route path="/galleries" component={Gallery} exact={true} />
         </Switch>
         
       </BrowserRouter>
