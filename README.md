@@ -1,23 +1,23 @@
 # Image Upload
 
-## Step 1: Install the package “multer” in the backend server node app.
-```
+## Step 1: [Install the package “multer” in the backend server node app](https://www.npmjs.com/package/multer).
+```javascript
 npm install --save multer
 ```
 ## Step 2:  Set Up the Schema for image property, an example of uploading a user profile image.
-```
+```javascript
   image: {
        type: Object
    }
 ```
 ###### If multiple images 
-```
+```javascript
 images: {
        type: Array
    }
 ```
 ## Step 3: Set up middleware file multer.js in the middlewares folder
-```
+```javascript
     const multer=require('multer')
     const storage=multer.diskStorage({
        destination:function(req,file,cb){
@@ -35,14 +35,14 @@ images: {
     }
 ```
 ## Step 4: In the routes.js file add the middleware upload function by importing multer middleware
-``` 
+```javascript
   const { upload } = require("../app/middlewares/multer")
   router.post('/users/register',upload.single('image'), usersController.register)
 // If multiple images you can use upload.array('images',10) 
 // field name images and 10 is number of images you can upload
 ```
 ## Step 5: In user controller handle files.
-```
+```javascript
    usersController.register = (req, res) => {
    const body = req.body
    const user = new User(body)
@@ -59,11 +59,11 @@ images: {
    }
 ```
 ## Step 6: Create the uploads folder outside the react folder and make it available by adding this line.
-```
+```javascript
   app.use('/uploads', express.static('uploads'));
 ```
 ## Step 7:  React form fields.
-```
+```javascript
 import React from 'react'
 import axios from './config/axios'
 import Swal from 'sweetalert2'
