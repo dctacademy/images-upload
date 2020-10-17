@@ -1,19 +1,12 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState,useEffect} from 'react'
 import { connect } from 'react-redux'
 import {updateUserInfo} from '../actions/User'
-// import { Link } from 'react-router-dom'
-import axios from './config/axios'
 const EditUser = (props) => {
-    const [formData, setFormData] = useState({email: "",fullName: ""})
+    const {user} = props
+    const [formData, setFormData] = useState({email: user.email || "", fullName: user.fullName || ""})
     useEffect(() => {
-        axios.get('/users/account',{
-            headers: {
-                'x-auth': localStorage.getItem("authToken")
-            }
-        }).then((response)=>{
-            setFormData({email: response.data.email, fullName: response.data.fullName})
-        })
-      },[]);
+        setFormData({email: user.email, fullName:  user.fullName})       
+    },[user])
     const handleSubmit = e =>{
         e.preventDefault();
         const id = props.match.params.id
@@ -22,19 +15,16 @@ const EditUser = (props) => {
         data.append('fullName', formData.fullName)
         data.append('image', formData.image)
         props.dispatch(updateUserInfo(id,data,props.history))
-        // console.log(formData)
     }
     const handleChange = e =>{
         setFormData({...formData, [e.target.name]: e.target.value })
     }
     const fileHandle = (e) =>{
-        // console.log(e.target.files)
         setFormData({...formData,image: e.target.files[0]})
     }
     return (
         <React.Fragment>
             <h2>Edit Account</h2>
-            {Object.keys(props.user).length > 0 && 
             <>
              <form onSubmit={handleSubmit}>
                 <label htmlFor="fullName">Full Name</label>
@@ -44,12 +34,11 @@ const EditUser = (props) => {
                 <input type="email" name="email" value={formData.email} onChange={handleChange}/>
                 <br />
                 <label htmlFor="image">Upload Image</label>
-                <input type="file" name="image"  onChange={fileHandle}/>
+                <input type="file" name="image" onChange={fileHandle}/>
                 <br />
                 <button >Update</button>
                 </form>
              </>
-            }
         </React.Fragment>
     )
 }
@@ -59,5 +48,4 @@ const mapStateToProps = (state) => {
         user: state.user
     }
 }
-
 export default connect(mapStateToProps)(EditUser)

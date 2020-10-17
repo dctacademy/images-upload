@@ -72,7 +72,10 @@ usersController.account = (req,res) => {
 usersController.update = (req,res) => {
     const id = req.params.id
     const body = req.body
-    body.image = req.file
+    delete body.image
+    if(!_.isEmpty(req.file)){
+        body.image = req.file
+    }
     User.findByIdAndUpdate({"_id": id}, body, {new: true})
         .then(user => {
             res.send(user)
